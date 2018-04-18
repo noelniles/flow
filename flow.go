@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/noelniles/flow/modules/strings"
+	"github.com/noelniles/flow/modules/imageio"
+	//"github.com/noelniles/flow/modules/strings"
 	"github.com/noelniles/flow/processing"
 	"runtime"
 )
@@ -18,14 +19,17 @@ func main() {
 
 	pipeline := processing.NewPipeline()
 
-	timesayer := strings.NewTimeSayer()
-	printer := strings.NewPrinter()
+	//timesayer := strings.NewTimeSayer()
+	//printer := strings.NewPrinter()
+	imagereader := imageio.NewImageReader()
+	imagereader.In <- "/home/me/Pictures/lena.jpg"
+	imageviewer := imageio.NewImageViewer()
 
 	// Connect the network.
-	printer.In = timesayer.Out
+	imageviewer.In = imagereader.Out
 
 	// Add the processes to the pipeline.
-	pipeline.AddProcesses(timesayer, printer)
+	pipeline.AddProcesses(imagereader, imageviewer)
 
 	pipeline.Run()
 }
